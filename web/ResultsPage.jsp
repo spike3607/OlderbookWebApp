@@ -17,11 +17,20 @@
     </head>
     <body>
         <h1>List of Authors:</h1>
-        
+
         <div>
-            <table>
-                <c:forEach>
-                    
+            <table width="800" border="2" >
+                <tr>
+                    <th>ID</th>
+                    <th>Author Name</th>
+                    <th>Date Added</th>
+                </tr>
+                <c:forEach var="a" items="${authorList}">
+                    <tr>
+                        <td>${a.authorId}</td>
+                        <td>${a.authorName}</td>
+                        <td>${a.dateAdded}></td>
+                    </tr>
                 </c:forEach>
             </table>
         </div>
