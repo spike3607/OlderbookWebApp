@@ -18,12 +18,12 @@
     <body>
         <h1>List of Authors:</h1>
 
-        <div>
-            <table width="800" border="2" >
+        <div class="container">
+            <table class="table table-striped table-hover table-condensed" width="400" height="300" border="2" >
                 <tr>
-                    <th>ID</th>
-                    <th>Author Name</th>
-                    <th>Date Added</th>
+                    <th class="tableHead">ID</th>
+                    <th class="tableHead">Author Name</th>
+                    <th class="tableHead">Date Added</th>
                 </tr>
                 <c:forEach var="a" items="${authorList}">
                     <tr>
