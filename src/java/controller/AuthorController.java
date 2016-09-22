@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Author;
+import model.AuthorDao;
+import model.AuthorDaoStrategy;
 import model.AuthorService;
 
 /**
@@ -34,11 +36,16 @@ public class AuthorController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         
-        AuthorService authServ = new AuthorService();
-        List<Author> list = authServ.findAllAuthors();
+        AuthorDaoStrategy dao = new AuthorDao( new MySqlDbStrategy(),
+                                                "com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book",
+                                                "root", "admin");
+        
+        AuthorService authServ = new AuthorService(dao);
+        
+        List<Author> list = authServ.getAuthorList();
         
         request.setAttribute("authorList", list);        
         

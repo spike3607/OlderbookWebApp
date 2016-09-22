@@ -16,12 +16,22 @@ import java.util.List;
  */
 public class AuthorService {
     
-    private List<Author> fakeDatabase = Arrays.asList(
-        new Author(1,"Sally Smith", new Date(2010, 12, 2)),
-        new Author(2,"Steve Kennedy", new Date(2014, 1, 30)),
-        new Author(3,"Kevin Rogers", new Date(2016, 5, 5)));
+    private AuthorDaoStrategy dao;
     
-    public List findAllAuthors () {
-       return fakeDatabase;
+//    private List<Author> fakeDatabase = Arrays.asList(
+//        new Author(1,"Sally Smith", new Date(2010, 12, 2)),
+//        new Author(2,"Steve Kennedy", new Date(2014, 1, 30)),
+//        new Author(3,"Kevin Rogers", new Date(2016, 5, 5)));
+//    
+//    public List findAllAuthors () {
+//       return fakeDatabase;
+//    }
+    
+    public List<Author> getAuthorList() throws Exception {
+        return dao.getAuthorList();
+    }
+    
+    public static void main(String[] args) {
+        
     }
 }

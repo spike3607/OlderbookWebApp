@@ -19,9 +19,10 @@ import java.util.Map;
  *
  * @author Spike
  */
-public class MySqlDBStrategy {
+public class MySqlDBStrategy implements DbStrategy {
     private Connection conn;
     
+    @Override
     public void openConnection(String driverClass, String url, String userName, 
                                 String password) throws Exception {
         
@@ -29,12 +30,14 @@ public class MySqlDBStrategy {
         conn = DriverManager.getConnection(url, userName, password);
     }
     
+    @Override
     public void closeConnection() throws Exception {
         conn.close();
     }
     
-    public List<Map> findAllRecords(String tableName) throws Exception {
-        String sql = "SELECT * FROM " + tableName;
+    @Override
+    public List<Map> findAllRecords(String tableName, int maxRecords) throws Exception {
+        String sql = "SELECT * FROM " + tableName + " LIMIT " + maxRecords;
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         List<Map> records = new ArrayList<>();
@@ -53,10 +56,18 @@ public class MySqlDBStrategy {
         return records;
     }
     
+    public int deleteRecordByPK(String tableName, String primaryKey, int value) throws Exception {
+        //DELETE FROM author WHERE author_id = 1
+        String sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = " + value;
+        Statement stmt = conn.createStatement();
+        int recordsUpdated = stmt.executeUpdate(sql);
+        return recordsUpdated;
+    }
+    
     public static void main(String[] args) throws Exception {
         MySqlDBStrategy db = new MySqlDBStrategy();
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
-        List<Map> records = db.findAllRecords("author");
+        List<Map> records = db.findAllRecords("author", 500);
         System.out.println(records);
         db.closeConnection();
     }
