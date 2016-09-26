@@ -17,6 +17,10 @@ import java.util.List;
 public class AuthorService {
     
     private AuthorDaoStrategy dao;
+
+    public AuthorService(AuthorDaoStrategy authDao) {
+        this.dao = authDao;
+    }
     
 //    private List<Author> fakeDatabase = Arrays.asList(
 //        new Author(1,"Sally Smith", new Date(2010, 12, 2)),
@@ -28,7 +32,7 @@ public class AuthorService {
 //    }
     
     public List<Author> getAuthorList() throws Exception {
-        return dao.getAuthorList();
+        return dao.getAllAuthors();
     }
     
     public static void main(String[] args) {

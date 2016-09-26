@@ -18,14 +18,17 @@ import model.Author;
 import model.AuthorDao;
 import model.AuthorDaoStrategy;
 import model.AuthorService;
+import model.DbStrategy;
+import model.MySqlDBStrategy;
 
 /**
  *
  * @author Spike
  */
 @WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
-public class AuthorController extends HttpServlet {
-
+public class AuthorController extends HttpServlet {    
+    private DbStrategy db;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,11 +42,13 @@ public class AuthorController extends HttpServlet {
             throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         
-        AuthorDaoStrategy dao = new AuthorDao( new MySqlDbStrategy(),
-                                                "com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book",
-                                                "root", "admin");
+        db = new MySqlDBStrategy();
+        AuthorDaoStrategy authDao
+                = new AuthorDao(db, "com.mysql.jdbc.Driver",
+                        "jdbc:mysql://localhost:3306/book", "root", "admin");
+        AuthorService authServ = new AuthorService(authDao);
         
-        AuthorService authServ = new AuthorService(dao);
+        
         
         List<Author> list = authServ.getAuthorList();
         
@@ -65,7 +70,12 @@ public class AuthorController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
         processRequest(request, response);
+        }
+        catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+        }
     }
 
     /**
@@ -79,7 +89,12 @@ public class AuthorController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
         processRequest(request, response);
+        }
+        catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+        }
     }
 
     /**

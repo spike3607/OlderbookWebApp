@@ -5,14 +5,15 @@
  */
 package model;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  *
- * @author Spike
+ * @author mschoenauer1
  */
 public interface AuthorDaoStrategy {
-
-    List<Author> getAuthorList();
-    
+    List<Author> getAllAuthors() throws Exception;
+    void addAuthor(String name, Date dateCreated) throws Exception;
+    int deleteAuthor(int key) throws Exception;
 }

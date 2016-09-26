@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  *
@@ -36,11 +37,11 @@ public class MySqlDBStrategy implements DbStrategy {
     }
     
     @Override
-    public List<Map> findAllRecords(String tableName, int maxRecords) throws Exception {
+    public List<Map<String, Object>> findAllRecords(String tableName, int maxRecords) throws Exception {
         String sql = "SELECT * FROM " + tableName + " LIMIT " + maxRecords;
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
-        List<Map> records = new ArrayList<>();
+        List<Map<String, Object>> records = new ArrayList<>();
         ResultSetMetaData rsmd = rs.getMetaData();
         int colCount = rsmd.getColumnCount();
         
@@ -56,6 +57,7 @@ public class MySqlDBStrategy implements DbStrategy {
         return records;
     }
     
+    @Override
     public int deleteRecordByPK(String tableName, String primaryKey, int value) throws Exception {
         //DELETE FROM author WHERE author_id = 1
         String sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = " + value;
@@ -64,10 +66,21 @@ public class MySqlDBStrategy implements DbStrategy {
         return recordsUpdated;
     }
     
+    public void createRecord(String tableName, List<String> colNames, List<Object> colValues) {
+        //INSERT INTO author (author_id, author_name, date_added) VALUES ('4', 'max maxian', '2009-12-24')
+        String sql = "INSERT INTO " + tableName;
+        StringJoiner sj = new StringJoiner(", "," (",")");
+        for(String colName : colNames) {
+            sj.add(colName);
+        }
+        sql += sj.toString();
+        sql += " VALUES ";
+    }
+    
     public static void main(String[] args) throws Exception {
         MySqlDBStrategy db = new MySqlDBStrategy();
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");
-        List<Map> records = db.findAllRecords("author", 500);
+        List<Map<String, Object>> records = db.findAllRecords("author", 500);
         System.out.println(records);
         db.closeConnection();
     }
