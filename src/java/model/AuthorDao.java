@@ -74,7 +74,7 @@ public class AuthorDao implements AuthorDaoStrategy {
     public final int deleteAuthor(int key) throws Exception {
         db.openConnection(driverClassName, url, userName, password);
         
-        int recordsUpdated = db.deleteRecordByPK("author_id", "author", key);
+        int recordsUpdated = db.deleteRecordByPK("author", "author_id", key);
         
         db.closeConnection();
         

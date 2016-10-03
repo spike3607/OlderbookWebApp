@@ -22,4 +22,7 @@ public interface DbStrategy {
     
     int deleteRecordByPK(String tableName, String primaryKey, int value) throws Exception;
     
+    int updateRecordByPrimaryKey(String tableName, String columnName, Object newValue, 
+                                String keyIdentifier, Object key) throws Exception;
+    
 }
