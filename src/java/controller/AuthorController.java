@@ -6,7 +6,7 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,19 +42,53 @@ public class AuthorController extends HttpServlet {
             throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
         
+        String destination = "/index.html";
+        String action = request.getParameter("action");
+        
         db = new MySqlDBStrategy();
         AuthorDaoStrategy authDao
                 = new AuthorDao(db, "com.mysql.jdbc.Driver",
                         "jdbc:mysql://localhost:3306/book", "root", "admin");
-        AuthorService authServ = new AuthorService(authDao);
+        AuthorService authService = new AuthorService(authDao);
         
+        try {
+            
+             
+            if (action.equals("list")) {
+                List<Author> authors = null;
+                authors = authService.getAuthorList();
+                request.setAttribute("authors", authors);
+                destination = "/listAuthors.jsp";
+
+            } else if (action.equals("add")) {
+                // Hard coded for now
+                authService.addAuthor("Karry Hoof", new Date());
+                
+                destination = "/index.html";
+                
+            } else if (action.equals("update")) {
+                // Hard code for now
+                authService.updateAuthor(4,"author_name","Kathy Schoenauer");
+                
+                destination = "/index.html";
+                
+            } else if (action.equals("delete")) {
+                // Hard Coded
+                authService.deleteAuthor(1);
+                
+                destination = "/index.html";
+                
+            } else {
+                // Error
+                System.out.println("Unable to find action parameter");
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+               
         
-        
-        List<Author> list = authServ.getAuthorList();
-        
-        request.setAttribute("authorList", list);        
-        
-        RequestDispatcher view = request.getRequestDispatcher("/ResultsPage.jsp");
+        RequestDispatcher view = request.getRequestDispatcher(destination);
         view.forward(request, response);
     }
 

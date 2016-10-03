@@ -30,7 +30,7 @@ public class AuthorDao implements AuthorDaoStrategy {
     }
     
     @Override
-    public final List<Author> getAllAuthors() throws Exception {
+    public List<Author> getAllAuthors() throws Exception {
         db.openConnection(driverClassName, url, userName, password);
         List<Author> records = new ArrayList<>();
 
@@ -56,28 +56,37 @@ public class AuthorDao implements AuthorDaoStrategy {
     }
     
     @Override
-    public final void addAuthor(String name, Date date) throws Exception {
+    public void addAuthor(String name, Date date) throws Exception {
         db.openConnection(driverClassName, url, userName, password);
         
         ArrayList columns = new ArrayList();
         columns.add("author_name");
-        columns.add("date_created");
+        columns.add("date_added");
         
         ArrayList values = new ArrayList();
         values.add(name);
         values.add(date);
-
+        
+        db.createRecord("author", columns, values);
+        
         db.closeConnection();
     }
     
     @Override
-    public final int deleteAuthor(int key) throws Exception {
+    public void updateAuthor(Object key, String columnName, Object newObject) throws Exception {
         db.openConnection(driverClassName, url, userName, password);
         
-        int recordsUpdated = db.deleteRecordByPK("author", "author_id", key);
+        db.updateRecordByPrimaryKey("author", columnName, newObject, "author_id", key);
         
         db.closeConnection();
+    }
+    
+    @Override
+    public void deleteAuthor(Object key) throws Exception {
+        db.openConnection(driverClassName, url, userName, password);
         
-        return recordsUpdated;
+        db.deleteRecordByPK("author", "author_id", (int) key);
+        
+        db.closeConnection();
     }
 }

@@ -69,6 +69,7 @@ public class MySqlDBStrategy implements DbStrategy {
         return recordsUpdated;
     }
     
+    @Override
     public int createRecord(String tableName, List<String> colNames, List<Object> colValues) throws Exception {
         //INSERT INTO author (author_id, author_name, date_added) VALUES ('4', 'max maxian', '2009-12-24')
         

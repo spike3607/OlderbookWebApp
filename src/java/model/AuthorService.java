@@ -35,6 +35,18 @@ public class AuthorService {
         return dao.getAllAuthors();
     }
     
+    public void addAuthor(String name, Date dateCreated) throws Exception {
+        dao.addAuthor(name,dateCreated);
+    }
+    
+    public void updateAuthor(Object key, String columnName, Object newObject) throws Exception {
+        dao.updateAuthor(key, columnName, newObject);
+    }
+    
+    public void deleteAuthor(Object key) throws Exception {
+        dao.deleteAuthor(key);
+    }
+    
     public static void main(String[] args) {
         
     }

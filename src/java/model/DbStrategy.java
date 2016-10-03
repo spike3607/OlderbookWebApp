@@ -20,6 +20,8 @@ public interface DbStrategy {
 
     void openConnection(String driverClass, String url, String userName, String password) throws Exception;
     
+    int createRecord(String tableName, List<String> colNames, List<Object> colValues) throws Exception;
+    
     int deleteRecordByPK(String tableName, String primaryKey, int value) throws Exception;
     
     int updateRecordByPrimaryKey(String tableName, String columnName, Object newValue, 
